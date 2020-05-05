@@ -9,5 +9,7 @@ All data structures are implemented in Julia. These implementations show off the
 Data structures implemented:
 - `SimpleVector`
 - `SimpleSparseVector`
+- `SimpleDict`
+- `SimpleDefaultDict`
 
 This package is largely for demonstration purposes only and not for production use.
