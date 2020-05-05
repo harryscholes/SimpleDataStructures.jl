@@ -1,23 +1,15 @@
+using Missings
 
 # Space complexity: O(n)
 mutable struct SimpleDict{K,V} <: AbstractDict{K,V}
-    keys::Vector{K}
-    values::Vector{V}
-    filled::BitArray
+    keys::Vector{Union{K, Missing}}
+    values::Vector{Union{V, Missing}}
     count::Int
 
     function SimpleDict{K,V}(; capacity::Integer = 8) where {K,V}
-        new{K,V}(
-            Vector{K}(undef, capacity),
-            Vector{V}(undef, capacity),
-            falses(capacity),
-            0,
-        )
+        new{K,V}(missings(K, capacity), missings(V, capacity), 0)
     end
 end
-
-
-
 
 #=
 Getting and setting
@@ -30,10 +22,10 @@ hash_index(key, capacity::Integer) = ((hash(key) % Int) & (capacity - 1)) + 1
 # TODO collision policy
 function Base.setindex!(sd::SimpleDict{K,V}, value::V, key::K) where {K,V}
     index = hash_index(key, length(sd.keys))
+    filled = !ismissing(sd.keys[index])
     sd.keys[index] = key
     sd.values[index] = value
-    if !sd.filled[index]
-        sd.filled[index] = true
+    if !filled
         sd.count += 1
     end
     return sd
@@ -47,38 +39,6 @@ function Base.getindex(sd::SimpleDict{K,V}, key::K) where {K,V}
     return sd.values[index]
 end
 
-# Time complexity: O(n)
-# function rehash!(sd::SimpleDict{K,V}, newsz::Integer) where {K,V}
-#     old_keys = sd.keys
-#     old_values = sd.values
-#     old_filled = sd.filled
-#     sz = length(old_keys)
-#
-#     keys = Vector{K}(undef, newsz)
-#     values = Vector{V}(undef, newsz)
-#     filled = zeros(UInt8, newsz)
-#     count = 0
-#
-#     for i in 1:sz
-#         if old_filled[i]
-#             key = old_keys[i]
-#             value = old_values[i]
-#             index = hash_index(key, newsz)
-#             keys[index] = key
-#             values[index] = value
-#             filled[index] = true
-#             count += 1
-#         end
-#     end
-#
-#     sd.keys = keys
-#     sd.values = values
-#     sd.filled = filled
-#     sd.count = count
-#
-#     return sd
-# end
-
 #=
 Interface methods
 =#
@@ -87,11 +47,15 @@ Base.length(sd::SimpleDict) = sd.count
 
 function Base.haskey(sd::SimpleDict{K,V}, key::K) where {K,V}
     index = hash_index(key, length(sd.keys))
-    return sd.filled[index] && sd.keys[index] == key
+    k = sd.keys[index]
+    if !ismissing(k)
+        return k == key
+    end
+    return false
 end
 
 function Base.iterate(sd::SimpleDict{K,V}, i::Integer = 1) where {K,V}
-    i = findnext(sd.filled, i) # find index of next filled, else return nothing
+    i = findnext(!ismissing, sd.keys, i) # find index of next filled, else return nothing
     if isnothing(i)
         return nothing
     else
@@ -108,6 +72,7 @@ d = SimpleDict{String,String}()
 d["a"] = "1"
 haskey(d, "b")
 d["b"] = "2"
+haskey(d, "b")
 d
 =#
 
@@ -157,4 +122,4 @@ for word in words
 end
 
 sdd
-#=
+=#
