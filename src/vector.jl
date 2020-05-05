@@ -1,5 +1,6 @@
 using .Libc: malloc, realloc
 
+# Space complexity: O(n)
 mutable struct SimpleVector{T} <: AbstractVector{T}
     buffer::Ptr{T}
     size::Int
@@ -26,13 +27,16 @@ function SimpleVector(xs::T...) where T
     return sv
 end
 
+# Time complexity: O(1)
 Base.size(sv::SimpleVector) = (sv.size,)
 
+# Time complexity: O(1)
 function Base.getindex(sv::SimpleVector{T}, i::Integer)::T
     checkbounds(sv, i)
     return unsafe_load(sv.buffer, i)
 end
 
+# Time complexity: O(1)
 function Base.setindex!(sv::SimpleVector{T}, x, i::Integer) where T
     x_T = convert(T, x)
     checkbounds(sv, i)
@@ -40,6 +44,7 @@ function Base.setindex!(sv::SimpleVector{T}, x, i::Integer) where T
     return sv
 end
 
+# Time complexity: Θ(1) amortised, O(1) worst case
 function Base.push!(sv::SimpleVector{T}, x) where T
     x_T = convert(T, x)
     sv.size += 1
@@ -49,6 +54,7 @@ function Base.push!(sv::SimpleVector{T}, x) where T
     setindex!(sv, x_T, sv.size)
 end
 
+# O(n)
 function Base.resize!(sv::SimpleVector{T}, n::Integer) where T
     n_bits = sizeof(T) * 8 * n
     sv.buffer = realloc(sv.buffer, n_bits)
