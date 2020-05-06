@@ -14,7 +14,7 @@ mutable struct SimpleVector{T} <: AbstractVector{T}
 
     # Only allow isbitstypes for simplicity
     function SimpleVector{T}(buffer::Ptr{T}, size::Integer, capacity::Integer) where T
-        isbitstype(T) || throw(ArgumentError("Elements of `SimpleVector` must be `isbitstype`"))
+        isbitstype(T) || throw(ArgumentError("eltype of `SimpleVector` must be `isbitstype`"))
         new{T}(buffer, size, capacity)
     end
 end
