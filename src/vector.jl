@@ -30,15 +30,6 @@ function SimpleVector{T}(; size::Integer = 0, capacity::Integer = 2) where T
     SimpleVector{T}(buffer, size, capacity)
 end
 
-function SimpleVector(xs::T...) where T
-    n = length(xs)
-    sv = SimpleVector{T}(size = n, capacity = n)
-    for i in 1:n
-        sv[i] = xs[i]
-    end
-    return sv
-end
-
 function SimpleVector(xs::AbstractVector{T}) where T
     n = length(xs)
     sv = SimpleVector{T}(size = n, capacity = n)
@@ -47,6 +38,8 @@ function SimpleVector(xs::AbstractVector{T}) where T
     end
     return sv
 end
+
+SimpleVector(xs::T...) where T = SimpleVector(collect(xs))
 
 #=
 Core methods
