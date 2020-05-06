@@ -1,6 +1,12 @@
 using SparseArrays
 
-# Space complexity: O(n)
+#=
+Sparse vector
+=#
+
+"""
+Space complexity: O(m)
+"""
 struct SimpleSparseVector{T} <: AbstractSparseArray{T, Int, 1}
     n::Int
     indices::Vector{Int}
@@ -13,15 +19,19 @@ struct SimpleSparseVector{T} <: AbstractSparseArray{T, Int, 1}
     end
 end
 
+#=
+Constructors
+=#
+
 SimpleSparseVector{T}(n::Integer) where T = SimpleSparseVector(n, Int[], T[])
 
-SparseArrays.nonzeros(ssv::SimpleSparseVector) = ssv.values
-SparseArrays.nonzeroinds(ssv::SimpleSparseVector) = ssv.indices
+#=
+Core methods
+=#
 
-# Time complexity: O(1)
-Base.size(ssv::SimpleSparseVector) = (ssv.n,)
-
-# Time complexity: O(n)
+"""
+Time complexity: O(m)
+"""
 function Base.getindex(ssv::SimpleSparseVector{T}, i::Integer) where T
     checkbounds(ssv, i)
     indices = nonzeroinds(sv)
@@ -33,7 +43,9 @@ function Base.getindex(ssv::SimpleSparseVector{T}, i::Integer) where T
     return zero(T)
 end
 
-# Time complexity: O(n)
+"""
+Time complexity: O(m)
+"""
 function Base.setindex!(ssv::SimpleSparseVector{T}, v::T, i::Integer) where T
     checkbounds(ssv, i)
     indices = nonzeroinds(ssv)
@@ -47,6 +59,18 @@ function Base.setindex!(ssv::SimpleSparseVector{T}, v::T, i::Integer) where T
     end
     return ssv
 end
+
+#=
+Interface
+=#
+
+SparseArrays.nonzeros(ssv::SimpleSparseVector) = ssv.values
+
+SparseArrays.nonzeroinds(ssv::SimpleSparseVector) = ssv.indices
+
+Base.size(ssv::SimpleSparseVector) = (ssv.n,)
+
+IndexStyle(::SimpleSparseVector) = IndexLinear
 
 #=
 # Examples

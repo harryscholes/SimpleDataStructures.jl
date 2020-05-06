@@ -1,6 +1,12 @@
 using .Libc: malloc, realloc
 
-# Space complexity: O(n)
+#=
+Vector
+=#
+
+"""
+Space complexity: O(n)
+"""
 mutable struct SimpleVector{T} <: AbstractVector{T}
     buffer::Ptr{T}
     size::Int
@@ -8,10 +14,14 @@ mutable struct SimpleVector{T} <: AbstractVector{T}
 
     # Only allow isbitstypes for simplicity
     function SimpleVector{T}(buffer::Ptr{T}, size::Integer, capacity::Integer) where T
-        isbitstype(T) || throw(ArgumentError("Elements of `SimpleVector` must be `isbitstype`")
+        isbitstype(T) || throw(ArgumentError("Elements of `SimpleVector` must be `isbitstype`"))
         new{T}(buffer, size, capacity)
     end
 end
+
+#=
+Constructors
+=#
 
 function SimpleVector{T}(; capacity::Integer = 2) where T
     n_bits = sizeof(T) * 8 * capacity
@@ -27,16 +37,21 @@ function SimpleVector(xs::T...) where T
     return sv
 end
 
-# Time complexity: O(1)
-Base.size(sv::SimpleVector) = (sv.size,)
+#=
+Core methods
+=#
 
-# Time complexity: O(1)
-function Base.getindex(sv::SimpleVector{T}, i::Integer)::T
+"""
+Time complexity: O(1)
+"""
+function Base.getindex(sv::SimpleVector{T}, i::Integer)::T where T
     checkbounds(sv, i)
     return unsafe_load(sv.buffer, i)
 end
 
-# Time complexity: O(1)
+"""
+Time complexity: O(1)
+"""
 function Base.setindex!(sv::SimpleVector{T}, x, i::Integer) where T
     x_T = convert(T, x)
     checkbounds(sv, i)
@@ -44,7 +59,9 @@ function Base.setindex!(sv::SimpleVector{T}, x, i::Integer) where T
     return sv
 end
 
-# Time complexity: Θ(1) amortised, O(1) worst case
+"""
+Time complexity: amortised O(1), O(n) worst case
+"""
 function Base.push!(sv::SimpleVector{T}, x) where T
     x_T = convert(T, x)
     sv.size += 1
@@ -54,7 +71,9 @@ function Base.push!(sv::SimpleVector{T}, x) where T
     setindex!(sv, x_T, sv.size)
 end
 
-# O(n)
+"""
+Time complexity: O(n)
+"""
 function Base.resize!(sv::SimpleVector{T}, n::Integer) where T
     n_bits = sizeof(T) * 8 * n
     sv.buffer = realloc(sv.buffer, n_bits)
@@ -65,7 +84,14 @@ function Base.resize!(sv::SimpleVector{T}, n::Integer) where T
     return sv
 end
 
-# Base.sizehint!(sv::SimpleVector, n::Integer) = resize!(sv, n)
+#=
+Interface
+=#
+
+Base.size(sv::SimpleVector) = (sv.size,)
+
+IndexStyle(::SimpleVector) = IndexLinear
+
 
 #=
 # Examples
