@@ -77,7 +77,7 @@ function Base.push!(sv::SimpleVector{T}, x) where T
     x_T = convert(T, x)
     sv.size += 1
     if sv.size > sv.capacity
-        resize!(sv, sv.capacity * 2)
+        resize!(sv, 2^ceil(Int, log2(sv.capacity)))
     end
     setindex!(sv, x_T, sv.size)
 end
