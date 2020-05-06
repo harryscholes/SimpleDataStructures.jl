@@ -23,16 +23,27 @@ end
 Constructors
 =#
 
-function SimpleVector{T}(; capacity::Integer = 2) where T
+function SimpleVector{T}(; size::Integer = 0, capacity::Integer = 2) where T
+    size ≤ capacity || throw(ArgumentError("`size` must be ≤ `capacity`"))
     n_bits = sizeof(T) * 8 * capacity
     buffer = convert(Ptr{T}, malloc(n_bits))
-    SimpleVector{T}(buffer, 0, capacity)
+    SimpleVector{T}(buffer, size, capacity)
 end
 
 function SimpleVector(xs::T...) where T
-    sv = SimpleVector{T}(capacity = length(xs))
-    for x in xs
-        push!(sv, x)
+    n = length(xs)
+    sv = SimpleVector{T}(size = n, capacity = n)
+    for i in 1:n
+        sv[i] = xs[i]
+    end
+    return sv
+end
+
+function SimpleVector(xs::AbstractVector{T}) where T
+    n = length(xs)
+    sv = SimpleVector{T}(size = n, capacity = n)
+    for i in 1:n
+        sv[i] = xs[i]
     end
     return sv
 end
@@ -75,12 +86,43 @@ end
 Time complexity: O(n)
 """
 function Base.resize!(sv::SimpleVector{T}, n::Integer) where T
+    if sv.capacity == n
+        return sv
+    end
     n_bits = sizeof(T) * 8 * n
     sv.buffer = realloc(sv.buffer, n_bits)
     sv.capacity = n
     if n < sv.size
         sv.size = n
     end
+    return sv
+end
+
+"""
+Time complexity: O(n)
+"""
+function Base.insert!(sv::SimpleVector{T}, index::Integer, item::T) where T
+    checkbounds(sv, index)
+    if sv.size == sv.capacity
+        resize!(sv, sv.capacity + 1)
+    end
+    sv.size += 1
+    for i = sv.size-1:-1:index
+        sv[i+1] = sv[i]
+    end
+    sv[index] = item
+    return sv
+end
+
+"""
+Time complexity: O(n)
+"""
+function Base.deleteat!(sv::SimpleVector, index::Integer)
+    checkbounds(sv, index)
+    for i = index:sv.size-1
+        sv[i] = sv[i+1]
+    end
+    sv.size -= 1
     return sv
 end
 
@@ -107,6 +149,8 @@ sv[1] = 10
 resize!(sv, 3)
 dump(sv)
 
+SimpleVector([1, 2, 3])
+
 sv = SimpleVector{Int}()
 sizehint!(sv, 100)
 for i = 1:100
@@ -123,5 +167,9 @@ push!(sv, complex(7, 3))
 push!(sv, 1//2)
 push!(sv, π)
 
-SimpleVector(1, 2, 3, 4, 5, 6, 7)
+SimpleVector(1, 2, 3, 4)
+
+x = SimpleVector(1:10...)
+insert!(x, 3, 100)
+deleteat!(x, 3)
 =#
