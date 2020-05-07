@@ -1,4 +1,5 @@
 using SparseArrays
+import SparseArrays: AbstractSparseVector, nonzeros, nonzeroinds
 
 #=
 Sparse vector
@@ -7,7 +8,7 @@ Sparse vector
 """
 Space complexity: O(m)
 """
-struct SimpleSparseVector{T} <: AbstractSparseArray{T, Int, 1}
+mutable struct SimpleSparseVector{T} <: AbstractSparseVector{T, Int}
     n::Int
     indices::Vector{Int}
     values::Vector{T}
@@ -34,7 +35,7 @@ Time complexity: O(m)
 """
 function Base.getindex(ssv::SimpleSparseVector{T}, i::Integer) where T
     checkbounds(ssv, i)
-    indices = nonzeroinds(sv)
+    indices = nonzeroinds(ssv)
     values = nonzeros(ssv)
     j = searchsortedfirst(indices, i)
     if j ≤ length(indices) && indices[j] == i
@@ -60,6 +61,42 @@ function Base.setindex!(ssv::SimpleSparseVector{T}, v::T, i::Integer) where T
     return ssv
 end
 
+"""
+Time complexity: O(m)
+"""
+function Base.insert!(ssv::SimpleSparseVector{T}, index::Integer, item::T) where T
+    checkbounds(ssv, index)
+    indices = nonzeroinds(ssv)
+    ssv.n += 1
+    for i in 1:length(indices)
+        if indices[i] ≥ index
+            indices[i] += 1
+        end
+    end
+    setindex!(ssv, item, index)
+end
+
+"""
+Time complexity: O(m)
+"""
+function Base.deleteat!(ssv::SimpleSparseVector, index::Integer)
+    checkbounds(ssv, index)
+    indices = nonzeroinds(ssv)
+    values = nonzeros(ssv)
+    j = findfirst(==(index), indices)
+    if !isnothing(j)
+        deleteat!(indices, j)
+        deleteat!(values, j)
+    end
+    for i in 1:length(indices)
+        if indices[i] ≥ index
+            indices[i] -= 1
+        end
+    end
+    ssv.n -= 1
+    return ssv
+end
+
 #=
 Interface
 =#
@@ -72,16 +109,20 @@ Base.size(ssv::SimpleSparseVector) = (ssv.n,)
 
 IndexStyle(::SimpleSparseVector) = IndexLinear
 
-#=
+
 # Examples
 
-v = rand(3)
-ssv = SimpleSparseVector(100, [1, 10, 50], v)
+#=
+ssv = SimpleSparseVector(100, [1, 10, 50], rand(3))
 ssv[1]
 ssv[2]
 ssv[50]
-ssv[101]
+# ssv[101]
 ssv[3] = rand()
+insert!(ssv, 10, rand())
+ssv[101]
+deleteat!(ssv, 20)
+deleteat!(ssv, 3)
 ssv
 
 ssv = SimpleSparseVector{Float64}(100)
