@@ -76,14 +76,3 @@ function Base.iterate(sd::SimpleDict{K,V}, i::Integer = 1) where {K,V}
         )
     end
 end
-
-#=
-# Examples
-d = SimpleDict{String,String}()
-d["a"] = "1"
-haskey(d, "b")
-d["b"] = "2"
-haskey(d, "b")
-d
-=#
-
