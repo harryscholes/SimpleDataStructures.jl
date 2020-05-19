@@ -67,12 +67,11 @@ end
 
 function Base.iterate(sd::SimpleDict{K,V}, i::Integer = 1) where {K,V}
     i = findnext(!ismissing, sd.keys, i) # find index of next filled, else return nothing
-    if isnothing(i)
-        return nothing
-    else
+    if !isnothing(i)
         return (
             Pair{K,V}(sd.keys[i], sd.values[i]),
             i == typemax(Int) ? 0 : i + 1,
         )
     end
+    return nothing
 end
