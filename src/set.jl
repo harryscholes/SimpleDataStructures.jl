@@ -14,6 +14,20 @@ struct SimpleSet{T} <: AbstractSet{T}
 end
 
 #=
+Constructors
+=#
+
+function SimpleSet{T}(xs::AbstractArray{T}) where T
+    ss = SimpleSet{T}()
+    for x in xs
+        push!(ss, x)
+    end
+    return ss
+end
+
+SimpleSet(xs::AbstractArray{T}) where T = SimpleSet{T}(xs)
+
+#=
 Core methods
 =#
 

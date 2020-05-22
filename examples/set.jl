@@ -13,3 +13,5 @@ push!(ss, 2)
 
 delete!(ss, 1)
 delete!(ss, 2)
+
+SimpleSet([1,2,3,1,2,3])
