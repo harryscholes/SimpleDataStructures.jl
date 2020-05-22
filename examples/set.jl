@@ -10,3 +10,6 @@ push!(ss, 1)
 2 in ss
 push!(ss, 2)
 2 in ss
+
+delete!(ss, 1)
+delete!(ss, 2)

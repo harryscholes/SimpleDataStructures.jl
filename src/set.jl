@@ -30,7 +30,13 @@ Time complexity: O(1)
 """
 Base.in(item::T, ss::SimpleSet{T}) where T = haskey(ss.d, item)
 
-# TODO delete!
+"""
+Time complexity: O(1)
+"""
+function Base.delete!(ss::SimpleSet{T}, item::T) where T
+    delete!(ss.d, item)
+    return ss
+end
 
 #=
 Interface
