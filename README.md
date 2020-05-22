@@ -11,5 +11,9 @@ Data structures implemented:
 - `SimpleSparseVector`
 - `SimpleDict`
 - `SimpleDefaultDict`
+- `SimpleLinkedList`
+- `SimpleStack`
+- `SimpleQueue`
+
 
 This package is largely for demonstration purposes only and not for production use.
