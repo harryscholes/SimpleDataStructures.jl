@@ -50,6 +50,18 @@ end
 
 hash_index(key, capacity::Integer) = ((hash(key) % Int) & (capacity - 1)) + 1
 
+"""
+Time complexity: O(1)
+"""
+function Base.delete!(sd::SimpleDict{K,V}, key::K) where {K,V}
+    haskey(sd, key) || throw(KeyError(key))
+    index = hash_index(key, length(sd.keys))
+    sd.keys[index] = missing
+    sd.values[index] = missing
+    sd.count -= 1
+    return sd
+end
+
 #=
 Interface
 =#

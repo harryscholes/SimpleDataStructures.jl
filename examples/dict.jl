@@ -10,3 +10,6 @@ haskey(d, "b")
 d["b"] = "2"
 haskey(d, "b")
 d
+
+delete!(d, "a")
+delete!(d, "b")
