@@ -15,5 +15,21 @@ Data structures implemented:
 - `SimpleStack`
 - `SimpleQueue`
 
+Methods implemented:
+- Access
+    - `getindex`
+- Setting
+    - `setindex!`
+- Insertion
+    - `insert!`
+    - `push!`
+- Deletion
+    - `deleteat!`
+    - `pop!`
+    - `popfirst!`
+
+Layout of this repo:
+- `src/`: the code
+- `examples/` examples of the APIs
 
 This package is largely for demonstration purposes only and not for production use.
