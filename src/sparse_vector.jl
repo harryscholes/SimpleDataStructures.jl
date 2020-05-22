@@ -13,9 +13,12 @@ mutable struct SimpleSparseVector{T} <: AbstractSparseVector{T, Int}
     indices::Vector{Int}
     values::Vector{T}
 
-    function SimpleSparseVector(n::Integer, indices::Vector{<:Integer}, values::Vector{T}) where T
+    function SimpleSparseVector(n::Integer,
+                                indices::Vector{<:Integer},
+                                values::Vector{T}) where T
         n ≥ 0 || throw(ArgumentError("`n` must be ≥ 0"))
-        length(indices) == length(values) || throw(ArgumentError("`indices` and `values` must be the same length"))
+        length(indices) == length(values) ||
+            throw(ArgumentError("`indices` and `values` must be the same length"))
         new{T}(n, indices, values)
     end
 end

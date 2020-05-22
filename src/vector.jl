@@ -13,7 +13,9 @@ mutable struct SimpleVector{T} <: AbstractVector{T}
     capacity::Int
 
     # Only allow isbitstypes for simplicity
-    function SimpleVector{T}(buffer::Ptr{T}, size::Integer, capacity::Integer) where T
+    function SimpleVector{T}(buffer::Ptr{T},
+                             size::Integer,
+                             capacity::Integer) where T
         isbitstype(T) || throw(ArgumentError("eltype of `SimpleVector` must be `isbitstype`"))
         new{T}(buffer, size, capacity)
     end
@@ -70,7 +72,8 @@ function Base.push!(sv::SimpleVector{T}, x) where T
     x_T = convert(T, x)
     sv.size += 1
     if sv.size > sv.capacity
-        resize!(sv, 2^ceil(Int, log2(sv.capacity)))
+        new_capacity = 2^ceil(Int, log2(sv.capacity))
+        resize!(sv, new_capacity)
     end
     setindex!(sv, x_T, sv.size)
 end
