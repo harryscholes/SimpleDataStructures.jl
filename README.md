@@ -23,12 +23,16 @@ Data structures implemented:
 Methods implemented:
 - Access
     - `getindex`
+    - `haskey`
+    - `in`
 - Setting
     - `setindex!`
 - Insertion
     - `insert!`
     - `push!`
+    - `pushfirst!`
 - Deletion
+    - `delete!`
     - `deleteat!`
     - `pop!`
     - `popfirst!`
