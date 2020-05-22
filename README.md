@@ -4,7 +4,12 @@ This package implements data structures, **simply**.
 
 Code that is essential for the data structures to work is included; everything else is left out.
 
-All data structures are implemented in Julia. These implementations show off the flexibility and extensibility of Julia's type system: the new types *just work*. Examples of the APIs are provided.
+- All data structures are implemented in Julia in `./src/`
+- Implementations show off the flexibility and extensibility of Julia's type system: the new types *just work*
+- Complexities are provided:
+    - Space complexities for data structures
+    - Time complexities for methods
+- Examples of the APIs are provided in `./examples/`
 
 Data structures implemented:
 - `SimpleVector`
@@ -27,9 +32,5 @@ Methods implemented:
     - `deleteat!`
     - `pop!`
     - `popfirst!`
-
-Layout of this repo:
-- `src/`: the code
-- `examples/` examples of the APIs
 
 This package is largely for demonstration purposes only and not for production use.
