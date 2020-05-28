@@ -11,7 +11,7 @@ Code that is essential for the data structures to work is included; everything e
     - Time complexities for methods
 - Examples of the APIs are provided in `examples/`
 
-## Data structures implemented:
+### Data structures implemented
 - `SimpleVector`
 - `SimpleSparseVector`
 - `SimpleDict`
@@ -20,7 +20,7 @@ Code that is essential for the data structures to work is included; everything e
 - `SimpleStack`
 - `SimpleQueue`
 
-## Methods implemented:
+### Methods implemented:
 - Access
     - `getindex`
     - `setindex!`
@@ -37,4 +37,5 @@ Code that is essential for the data structures to work is included; everything e
     - `pop!`
     - `popfirst!`
 
+### Warranty
 This package is largely for demonstration purposes only and not for production use.
