@@ -43,52 +43,12 @@ Core methods
 """
 Time complexity: O(1)
 """
-function Base.push!(sll::SimpleLinkedList{T}, item::T) where T
-    node = Node(item)
-    last = sll.root.prev
-    last.next = node
-    node.prev = last
-    node.next = sll.root
-    sll.root.prev = node
-    sll.n += 1
-    return sll
-end
-
-"""
-Time complexity: O(1)
-"""
 Base.first(sll::SimpleLinkedList) = sll.root.next.data
 
 """
 Time complexity: O(1)
 """
 Base.last(sll::SimpleLinkedList) = sll.root.prev.data
-
-"""
-Time complexity: O(1)
-"""
-function Base.pop!(sll::SimpleLinkedList)
-    isempty(sll) && throw(ArgumentError("`SimpleLinkedList` is empty"))
-    last = sll.root.prev
-    penultimate = last.prev
-    penultimate.next = sll.root
-    sll.root.prev = penultimate
-    sll.n -= 1
-    return last.data
-end
-
-"""
-Time complexity: O(1)
-"""
-function Base.popfirst!(sll::SimpleLinkedList)
-    isempty(sll) && throw(ArgumentError("`SimpleLinkedList` is empty"))
-    first = sll.root.next
-    second = first.next
-    second.prev = sll.root
-    sll.root.next = second
-    sll.n -= 1
-    return first.data
-end
 
 """
 Time complexity: O(n)
@@ -115,6 +75,33 @@ function Base.setindex!(sll::SimpleLinkedList{T}, item::T, index::Integer) where
 end
 
 """
+Time complexity: O(1)
+"""
+function Base.push!(sll::SimpleLinkedList{T}, item::T) where T
+    node = Node(item)
+    last = sll.root.prev
+    last.next = node
+    node.prev = last
+    node.next = sll.root
+    sll.root.prev = node
+    sll.n += 1
+    return sll
+end
+
+"""
+Time complexity: O(1)
+"""
+function Base.pop!(sll::SimpleLinkedList)
+    isempty(sll) && throw(ArgumentError("`SimpleLinkedList` is empty"))
+    last = sll.root.prev
+    penultimate = last.prev
+    penultimate.next = sll.root
+    sll.root.prev = penultimate
+    sll.n -= 1
+    return last.data
+end
+
+"""
 Time complexity: O(n)
 """
 function Base.insert!(sll::SimpleLinkedList{T}, index::Integer, item::T) where T
@@ -132,6 +119,19 @@ function Base.insert!(sll::SimpleLinkedList{T}, index::Integer, item::T) where T
     new_node.next = next_node
     sll.n += 1
     return sll
+end
+
+"""
+Time complexity: O(1)
+"""
+function Base.popfirst!(sll::SimpleLinkedList)
+    isempty(sll) && throw(ArgumentError("`SimpleLinkedList` is empty"))
+    first = sll.root.next
+    second = first.next
+    second.prev = sll.root
+    sll.root.next = second
+    sll.n -= 1
+    return first.data
 end
 
 """
