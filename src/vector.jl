@@ -43,8 +43,6 @@ function SimpleVector(xs::AbstractVector{T}) where T
     return sv
 end
 
-SimpleVector(xs::T...) where T = SimpleVector(collect(xs))
-
 #=
 Core methods
 =#
