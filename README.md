@@ -11,7 +11,7 @@ Code that is essential for the data structures to work is included; everything e
     - Time complexities for methods
 - Examples of the APIs are provided in `examples/`
 
-### Data structures implemented
+### Data structures implemented:
 - `SimpleVector`
 - `SimpleSparseVector`
 - `SimpleDict`
