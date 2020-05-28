@@ -23,10 +23,10 @@ Data structures implemented:
 Methods implemented:
 - Access
     - `getindex`
+    - `setindex!`
+- Search
     - `haskey`
     - `in`
-- Setting
-    - `setindex!`
 - Insertion
     - `insert!`
     - `push!`
