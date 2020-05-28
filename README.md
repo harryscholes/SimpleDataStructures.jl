@@ -1,6 +1,6 @@
 # SimpleDataStructures.jl
 
-This package implements data structures —— **simply**.
+This package implements data structures — **simply**.
 
 Code that is essential for the data structures to work is included; everything else is left out.
 
